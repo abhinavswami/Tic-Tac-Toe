@@ -1,5 +1,5 @@
 <template>
-    <td class="cell">
+    <td class="cell" @click ="strike">
         {{ mark }}</td>
 </template>
 
@@ -12,6 +12,16 @@ export default {
             frozen: false,
             // hold either X or O to be placed in the td
             mark: ''
+        }
+    },
+    methods: {
+        strike() {
+            if(!this.frozen){
+                // get either X or O from the grid component
+                this.mark = this.$parent.activePlayer
+                this.frozen = true
+                Event.$emit('strike', this.name)
+            }
         }
     }
 }
