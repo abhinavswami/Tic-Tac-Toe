@@ -1,20 +1,29 @@
 <template>
-    
+    <td class="cell">
+        {{ mark }}</td>
 </template>
 
 <script>
-    export default {
-        data() {}
+export default {
+    props: ['name'],
+    data() {
+        return {
+            // enable the player tp place a mark
+            frozen: false,
+            // hold either X or O to be placed in the td
+            mark: ''
+        }
     }
+}
 </script>
 
 <style>
-    .cell {
-  width: 33.333%;
-  height: 90px;
-  border: 6px solid #2c3e50;
-  font-size: 3.5em;
-  font-family: 'Gochi Hand', sans-serif;
+.cell {
+    width: 33.333%;
+    height: 90px;
+    border: 6px solid #2c3e50;
+    font-size: 3.5em;
+    font-family: 'Gochi Hand', sans-serif;
 }
 
 .cell:hover {
@@ -22,25 +31,25 @@
 }
 
 .cell::after {
-  content: '';
-  display: block;
+    content: '';
+    display: block;
 }
 
 .cell:first-of-type {
-  border-left-color: transparent;
-  border-top-color: transparent;
+    border-left-color: transparent;
+    border-top-color: transparent;
 }
 
 .cell:nth-of-type(2) {
-  border-top-color: transparent;
+    border-top-color: transparent;
 }
 
 .cell:nth-of-type(3) {
-  border-right-color: transparent;
-  border-top-color: transparent;
+    border-right-color: transparent;
+    border-top-color: transparent;
 }
 
 tr:nth-of-type(3) .cell {
-  border-bottom-color: transparent;
+    border-bottom-color: transparent;
 }
 </style>
