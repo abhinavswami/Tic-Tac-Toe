@@ -23,7 +23,12 @@ export default {
                 this.frozen = true
                 this.$parent.$emit('strike', this.name)
             }
-        }
+        },
+    },
+    created() {
+        this.$parent.$on('freeze', () => {
+            this.frozen = true
+        })
     }
 }
 </script>
