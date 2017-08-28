@@ -1,25 +1,35 @@
 <template>
-    <table class="grid">
-        <tr>
-            <cell name="1"></cell>
-            <cell name="2"></cell>
-            <cell name="3"></cell>
-        </tr>
-        <tr>
-            <cell name="4"></cell>
-            <cell name="5"></cell>
-            <cell name="6"></cell>
-        </tr>
-        <tr>
-            <cell name="7"></cell>
-            <cell name="8"></cell>
-            <cell name="9"></cell>
-        </tr>
-    </table>
+    <div>
+        <div class="gameStatus" :class="gameStatusColor">
+            {{gameStatusMessage}}
+
+        </div>
+        <div>
+            <table class="grid">
+                <tr>
+                    <cell name="1"></cell>
+                    <cell name="2"></cell>
+                    <cell name="3"></cell>
+                </tr>
+                <tr>
+                    <cell name="4"></cell>
+                    <cell name="5"></cell>
+                    <cell name="6"></cell>
+                </tr>
+                <tr>
+                    <cell name="7"></cell>
+                    <cell name="8"></cell>
+                    <cell name="9"></cell>
+                </tr>
+            </table>
+        </div>
+    </div>
 </template>
 
 <script>
+import Cell from './Cell';
 export default {
+    components: { Cell },
     data() {
         return {
             // can be X or O
@@ -49,7 +59,97 @@ export default {
             ],
 
         }
-    }
+    },
+    computed: {
+        // helper function to get the non active player
+        nonActivePlayer() {
+            if (this.activePlayer === 'O') {
+                return 'X'
+            }
+            return 'O'
+        }
+    },
+    watch: {
+        // watches for the changes in the game status and changes the status message and color accordingly
+        gameStatus() {
+            if (this.gameStatus === 'win') {
+                this.gameStatusColor = 'statusWin'
+                this.gameStatusMessage = `{$this.activePlayer} wins!`
+                return
+            }
+            else if (this.gameStatus === 'draw') {
+                this.gameStatusColor = 'statusDraw'
+                this.gameStatusMessage = 'Draw!'
+                return
+            }
+            this.gameStatusMessage = `{$this.activePlayer}'s turn`
+        }
+    },
+    methods: {
+        changePlayer() {
+            this.activePlayer = this.nonActivePlayer
+        },
+
+        // returns the game status to the gameStatus property
+        changeGameStatus() {
+            if (this.checkForWin()) {
+                return this.gameIsWon()
+            }
+            // checks if the game is not yet won and all the 9 cells are filled
+            else if (this.moves === 9) {
+                // sets the status to draw
+                return 'draw'
+            }
+            // sets the status to  turn
+            return 'turn'
+        },
+        // check for all possible win conditions
+        checkForWin() {
+            for (let i = 0; i < this.windConditions.length; i++) {
+                let wc = this.windConditions[i]
+                let cells = this.cells
+                // compare 3 cell values based on conditions
+                if (this.areEqual(cells[wc[0]], cells[wc[1]], cells[wc[2]])) {
+                    return true
+                }
+            }
+            return false
+        },
+        areEqual() {
+            var len = arguments.length
+            for (let i = 1; i < len; i++) {
+                if (arguments[i] === '' || arguments[i] != arguments[i - 1]) {
+                    return false
+                }
+            }
+            return true
+        },
+        gameIsWon() {
+            // fires win event to change the score
+            Event.$emit('win', this.activePlayer)
+
+            // sets the game status message
+            this.$gameStatusMessage = `{this.activePlayer} wins!`
+
+            // fires an event for the Cel to freeze     
+
+            Event.$emit('freeze')
+            return 'win'
+        }
+    },
+    created() {
+        // listen for a strike made by the user on cell
+        // this is called by the cell component
+        this.$on('strike', (cellNumber) => {
+            console.log("Inside created() --> grid`")
+            // sets either X or O as the current player
+            this.cells[cellNumber] = this.activePlayer
+            // increment the number of moves
+            this.moves++
+            this.gameStatus = this.changeGameStatus()
+            this.changePlayer()
+        })
+    },
 }
 </script>
 
