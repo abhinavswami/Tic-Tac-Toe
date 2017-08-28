@@ -16,11 +16,12 @@ export default {
     },
     methods: {
         strike() {
+            
             if(!this.frozen){
                 // get either X or O from the grid component
                 this.mark = this.$parent.activePlayer
                 this.frozen = true
-                Event.$emit('strike', this.name)
+                this.$parent.$emit('strike', this.name)
             }
         }
     }
