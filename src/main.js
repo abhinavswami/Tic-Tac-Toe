@@ -6,7 +6,6 @@ import router from './router'
 
 Vue.config.productionTip = false
 
-window.Event = new Vue()
 
 /* eslint-disable no-new */
 new Vue({
@@ -14,5 +13,4 @@ new Vue({
   router,
   template: '<App/>',
   components: { App },
-  render: h => h(App)
 })
