@@ -71,10 +71,10 @@ export default {
     },
     watch: {
         // watches for the changes in the game status and changes the status message and color accordingly
-        gameStatus() {
+        activePlayer() {
             if (this.gameStatus === 'win') {
                 this.gameStatusColor = 'statusWin'
-                this.gameStatusMessage = `{$this.activePlayer} wins!`
+                this.gameStatusMessage = `${this.activePlayer} wins!`
                 return
             }
             else if (this.gameStatus === 'draw') {
@@ -82,7 +82,7 @@ export default {
                 this.gameStatusMessage = 'Draw!'
                 return
             }
-            this.gameStatusMessage = `{$this.activePlayer}'s turn`
+            this.gameStatusMessage = `${this.activePlayer}'s turn`
         }
     },
     methods: {
@@ -100,6 +100,7 @@ export default {
                 // sets the status to draw
                 return 'draw'
             }
+            
             // sets the status to  turn
             return 'turn'
         },
@@ -126,14 +127,13 @@ export default {
         },
         gameIsWon() {
             // fires win event to change the score
-            Event.$emit('win', this.activePlayer)
+            this.$parent.$emit('win', this.activePlayer)
 
             // sets the game status message
-            this.$gameStatusMessage = `{this.activePlayer} wins!`
+            this.gameStatusMessage = `${this.activePlayer} wins!`
 
-            // fires an event for the Cel to freeze     
-
-            Event.$emit('freeze')
+            // fires an event for the Cell to freeze     
+            this.$emit('freeze')
             return 'win'
         }
     },
@@ -141,7 +141,6 @@ export default {
         // listen for a strike made by the user on cell
         // this is called by the cell component
         this.$on('strike', (cellNumber) => {
-            console.log("Inside created() --> grid`")
             // sets either X or O as the current player
             this.cells[cellNumber] = this.activePlayer
             // increment the number of moves
