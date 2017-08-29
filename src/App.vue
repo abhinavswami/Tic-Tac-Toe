@@ -1,14 +1,16 @@
 <template>
   <div id="app">
     <div class="scoreBoard">
-    <span>O has {{wins.O}} wins </span>
-    <h2>Score Board</h2>
-    <span>X has {{wins.X}} wins </span>
+      <span>O has {{wins.O}} wins </span>
+      <h2>Score Board</h2>
+      <span>X has {{wins.X}} wins </span>
     </div>
     <div id="details">
       <h1>Tic-Tac-Toe</h1>
+      <h2> Match #{{matches+1}}</h2>
     </div>
     <grid></grid>
+    <button class="restart" @click="restart">Restart</button>
   </div>
 </template>
 
@@ -30,7 +32,15 @@ export default {
   },
   created() {
     this.$on('win', winner => this.wins[winner]++)
+  },
+  methods: {
+    restart() {
+      Event.$emit('clearCell')
+      Event.$emit('gridReset')
+      this.matches++
+    }
   }
+
 }
 </script>
 
@@ -61,8 +71,8 @@ h1 {
   background-color: #e74c3c;
   color: #fff;
   border: 0px;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 50px;
+  border-bottom-right-radius: 50px;
   font-family: 'Dosis', Helvetica, sans-serif;
   font-size: 1.4em;
   font-weight: bold;
@@ -87,6 +97,8 @@ h1 {
   box-shadow: 10px solid #fff;
   padding: 20px;
   overflow-x: none;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 .scoreBoard h2 {
