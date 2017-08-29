@@ -71,10 +71,9 @@ export default {
     },
     watch: {
         // watches for the changes in the game status and changes the status message and color accordingly
-        activePlayer() {
+        moves() {
             if (this.gameStatus === 'win') {
                 this.gameStatusColor = 'statusWin'
-                this.gameStatusMessage = `${this.activePlayer} wins!`
                 return
             }
             else if (this.gameStatus === 'draw') {
@@ -148,6 +147,9 @@ export default {
             this.gameStatus = this.changeGameStatus()
             this.changePlayer()
         })
+        Event.$on('gridReset', () => {
+            Object.assign(this.$data, this.$options.data())
+        })
     },
 }
 </script>
@@ -163,8 +165,8 @@ export default {
 .gameStatus {
     margin: 0px;
     padding: 15px;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
     background-color: #f1c40f;
     color: #fff;
     font-size: 1.4em;
