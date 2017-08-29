@@ -29,6 +29,11 @@ export default {
         this.$parent.$on('freeze', () => {
             this.frozen = true
         })
+
+        Event.$on('clearCell', () => {
+            this.mark = ''
+            this.frozen= false
+        })
     }
 }
 </script>
